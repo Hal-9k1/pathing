@@ -159,8 +159,6 @@ void Tests::runTests()
           astar.getResult().size(),
           2
         );
-        for (int handle : astar.getResult()) std::printf("%d ", handle);
-        std::printf("\n");
       }
       if (shouldTest())
       {
