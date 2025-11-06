@@ -1,13 +1,20 @@
 #pragma once
 
-#include "IGraph.hpp"
+#include <vector>
+
 #include "Node.hpp"
+#include "Vec2.hpp"
 
 class Graph
 {
 public:
-  int getNeighbors(const Node *pNode, Node **ppNeighbors) override;
-  int getMaxNeighbors() override;
-  Node *createNode(const Vec2 &pos);
-  void connectNodes(const Node &node, Node **ppNeighbors);
+  const std::vector<int> &getNeighborHandles(int handle) override;
+  int createNode(const Vec2 &pos);
+  int getMaxHandleValue();
+  Node &getNode(int handle);
+  void connectNodes(int handle, int *pNeighbors);
+
+private:
+  std::vector<Node> nodes;
+  std::vector<std::vector<int>> neighbors;
 }

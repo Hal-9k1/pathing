@@ -5,6 +5,7 @@
 class Node
 {
 public:
+  Node(const Vec2 &pos);
   const Vec2 &getPos();
 
 private:
