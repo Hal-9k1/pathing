@@ -1,9 +1,12 @@
 #pragma once
 
-struct Vec2
+class Vec2
 {
-  double getDistTo(const Vec2 &other);
+public:
+  Vec2(double x, double y);
+  double getDistTo(const Vec2 &other) const;
 
+private:
   double x;
   double y;
-}
+};

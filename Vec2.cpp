@@ -2,7 +2,11 @@
 
 #include <cmath>
 
-double Vec2::getDistTo(const Vec2 &other)
+Vec2::Vec2(double x, double y)
+  : x(x), y(y)
+{ }
+
+double Vec2::getDistTo(const Vec2 &other) const
 {
   double dx = x - other.x;
   double dy = y - other.y;

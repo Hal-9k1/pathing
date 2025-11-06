@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <cstddef>
+#include <cstdlib>
 
 #include "Tests.hpp"
 
@@ -14,7 +15,7 @@ int main()
   }
   else
   {
-    std::printf("%d unit tests failed.\n", failedTests);
+    std::printf("%d unit test(s) failed.\n", failedTests);
     return EXIT_FAILURE;
   }
 }

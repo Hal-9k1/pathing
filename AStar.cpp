@@ -1,20 +1,22 @@
 #include "AStar.hpp"
 
 AStar::AStar(const Graph &graph, int startHandle, int endHandle)
-  : graph(graph), startHandle(startHandle), open(NodeCompare(*this))
+  : graph(graph),
+    startHandle(startHandle),
+    endNodePos(graph.getNode(endHandle).getPos()),
+    openQueue(NodeCompare(*this))
 {
-  endNodePos = graph.getNode(endHandle).getPos();
   saveCostToStart(startHandle);
   saveCostToEnd(startHandle);
-  open.push(startHandle);
+  openQueue.push(startHandle);
 }
 
 bool AStar::run()
 {
-  while (!open.empty())
+  while (!openQueue.empty())
   {
-    int curHandle = open.top();
-    open.pop();
+    int curHandle = openQueue.top();
+    openQueue.pop();
     openSet.erase(curHandle);
     if (curHandle == endHandle)
     {
@@ -27,7 +29,8 @@ bool AStar::run()
       saveCostToEnd(neighborHandle);
       if (isBetterPath && openSet.find(neighborHandle) == openSet.end())
       {
-        open.push(neighborHandle);
+        backNode.insert_or_assign(neighborHandle, curHandle);
+        openQueue.push(neighborHandle);
         openSet.insert(neighborHandle);
       }
     }
@@ -35,12 +38,12 @@ bool AStar::run()
   return false;
 }
 
-const std::vector<int> &getResult()
+const std::vector<int> &AStar::getResult() const
 {
   return result;
 }
 
-const Vec2 &AStar::getGraphPos(int handle)
+const Vec2 &AStar::getGraphPos(int handle) const
 {
   return graph.getNode(handle).getPos();
 }
@@ -72,16 +75,35 @@ void AStar::saveCostToEnd(int handle)
   }
 }
 
-double AStar::getTotalCost(int handle)
+double AStar::getTotalCost(int handle) const
 {
-  return astar.costToStart.at(handle) + astar.costToEnd.at(handle);
+  return costToStart.at(handle) + costToEnd.at(handle);
+}
+
+void AStar::assembleResult()
+{
+  int pathLength = 0;
+  int handle = endHandle;
+  while (handle != startHandle)
+  {
+    ++pathLength;
+    handle = backNode.at(handle);
+  }
+  result.resize(pathLength);
+  handle = endHandle;
+  auto iter = result.rbegin();
+  while (handle != startHandle)
+  {
+    *iter++ = handle;
+    handle = backNode.at(handle);
+  }
 }
 
 AStar::NodeCompare::NodeCompare(const AStar &astar)
   : astar(astar)
 { }
 
-bool AStar::NodeCompare::operator()(int a, int b)
+bool AStar::NodeCompare::operator()(int a, int b) const
 {
-  return astar.getTotalStart(a) < astar.getTotalCost(b);
+  return astar.getTotalCost(a) < astar.getTotalCost(b);
 }

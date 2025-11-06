@@ -8,13 +8,13 @@
 class Graph
 {
 public:
-  const std::vector<int> &getNeighborHandles(int handle) override;
+  const std::vector<int> &getNeighborHandles(int handle) const;
   int createNode(const Vec2 &pos);
-  int getMaxHandleValue();
   Node &getNode(int handle);
-  void connectNodes(int handle, int *pNeighbors);
+  const Node &getNode(int handle) const;
+  void connectNodes(int handle, int numNeighbors, int *pNeighbors);
 
 private:
   std::vector<Node> nodes;
   std::vector<std::vector<int>> neighbors;
-}
+};
