@@ -36,7 +36,7 @@ private:
 
   const Vec2 &getGraphPos(int handle) const;
   double getTotalCost(int handle) const;
-  bool saveCostToStart(int handle);
+  bool saveCostToStart(int handle, int forcedParentHandle);
   void saveCostToEnd(int handle);
   void assembleResult();
 };

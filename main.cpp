@@ -8,6 +8,7 @@ int main()
 {
   Tests tests;
   int failedTests = tests.run();
+  std::printf("\n");
   if (!failedTests)
   {
     std::printf("All unit tests passed.\n");
