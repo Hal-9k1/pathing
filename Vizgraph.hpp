@@ -1,10 +1,9 @@
 #pragma once
 
-#include "IGraph.hpp"
 #include "Obstacle.hpp"
 
-class Vizgraph : IGraph
+class Vizgraph
 {
 public:
-  void add(Obstacle &obs);
+  void add(const Obstacle &obs);
 };

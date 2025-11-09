@@ -17,20 +17,25 @@ Obstacle::Obstacle(const Vec2 &pos, double rot, const Vec2 &size)
 
 bool Obstacle::intersectsSegment(const Segment &segment) const
 {
-  Segment uvSpace = {
-    u.dot(segment.p0) / u.dot(u) * u,
-    v.dot(segment.p1) / v.dot(v) * v
-  };
-  double xa = -uvSpace.p0.x / (uvSpace.p1.x - uvSpace.p0.x);
-  double xb = (2.0 - uvSpace.p0.x) / (uvSpace.p1.x - uvSpace.p0.x);
-  bool xaMin = uvSpace.p1.x > uvSpace.p0.x;
-  double minX = xaMin ? xa ? xb;
-  double maxX = xaMin ? xb ? xa;
-  double ya = -uvSpace.p0.y / (uvSpace.p1.y - uvSpace.p0.y);
-  double yb = (2.0 - uvSpace.p0.y) / (uvSpace.p1.y - uvSpace.p0.y);
-  bool xbMin = uvSpace.p1.y > uvSpace.p0.y;
-  double minY = yaMin ? ya ? yb;
-  double maxY = yaMin ? yb ? ya;
+  Vec2 u0 = u.dot(segment.p0) / u.dot(u) * u;
+  Vec2 v0 = v.dot(segment.p1) / v.dot(v) * v;
+  double a = u0.x;
+  double b = u0.y;
+  double c = v0.x;
+  double d = v0.y;
+  double tx0 = -a / (c - a);
+  double tx1 = (1 - a) / (c - a);
+  double ty0 = -b / (d - b);
+  double ty1 = (1 - b) / (d - b);
+  double k1 = a + (c - a) * ty0;
+  double k2 = a + (c - a) * ty1;
+  double k3 = b + (d - b) * tx0;
+  double k4 = b + (d - b) * tx1;
+  bool b1 = 0 <= k1 && k1 <= 1;
+  bool b2 = 0 <= k2 && k2 <= 1;
+  bool b3 = 0 <= k3 && k3 <= 1;
+  bool b4 = 0 <= k4 && k4 <= 1;
+  return b1 || b2 || b3 || b4;
 }
 
 const std::vector<Vec2> &Obstacle::getCorners() const
