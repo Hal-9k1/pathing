@@ -1,14 +1,16 @@
 #include "Obstacle.hpp"
 
+#include <cmath>
+
 Obstacle::Obstacle(const Vec2 &pos, double rot, const Vec2 &size)
   : pos(pos), rot(rot), size(size), corners(4)
 {
   double s = std::sin(rot);
   double c = std::cos(rot);
-  u = c * size.x + s * size.y;
-  v = -s * size.x + c * size.y;
-  Vec2 xy(u / 2, v / 2);
-  Vec2 xny(u / 2, -v / 2);
+  u = Vec2(c, s) * size.getX();
+  v = Vec2(-s, c) * size.getY();
+  Vec2 xy = size / 2;
+  Vec2 xny(xy.getX(), -xy.getY());
   corners[0] = pos - xy;
   corners[1] = pos + xny;
   corners[2] = pos + xy;
@@ -19,10 +21,10 @@ bool Obstacle::intersectsSegment(const Segment &segment) const
 {
   Vec2 u0 = u.dot(segment.p0) / u.dot(u) * u;
   Vec2 v0 = v.dot(segment.p1) / v.dot(v) * v;
-  double a = u0.x;
-  double b = u0.y;
-  double c = v0.x;
-  double d = v0.y;
+  double a = u0.getX();
+  double b = u0.getY();
+  double c = v0.getX();
+  double d = v0.getY();
   double tx0 = -a / (c - a);
   double tx1 = (1 - a) / (c - a);
   double ty0 = -b / (d - b);

@@ -16,7 +16,7 @@ double Vec2::dot(const Vec2 &other) const
   return x * other.x + y * other.y;
 }
 
-double Vec2::unit() const
+Vec2 Vec2::unit() const
 {
   return *this / len();
 }
@@ -24,6 +24,16 @@ double Vec2::unit() const
 double Vec2::len() const
 {
   return std::sqrt(this->dot(*this));
+}
+
+double Vec2::getX() const
+{
+  return x;
+}
+
+double Vec2::getY() const
+{
+  return y;
 }
 
 Vec2 Vec2::operator+(const Vec2 &other) const

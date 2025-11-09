@@ -3,6 +3,7 @@
 class Vec2
 {
 public:
+  Vec2() = default;
   Vec2(double x, double y);
   double getDistTo(const Vec2 &other) const;
   double dot(const Vec2 &other) const;
@@ -14,6 +15,8 @@ public:
   Vec2 operator-() const;
   Vec2 operator*(double other) const;
   Vec2 operator/(double other) const;
+  double getX() const;
+  double getY() const;
 
 private:
   double x;
