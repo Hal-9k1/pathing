@@ -1,10 +1,19 @@
 #pragma once
 
 #include "BaseGraph.hpp"
-#include "Obstacle.hpp"
+#include "ObstacleState.hpp"
+#include "Segment.hpp"
+
+#include <vector>
 
 class Vizgraph : public BaseGraph
 {
 public:
-  void add(const Obstacle &obs);
+  int addObstacle(const ObstacleState &obs);
+
+private:
+  bool segmentIntersectsAny(const Segment &segment);
+
+  std::vector<ObstacleState> obsData;
+  std::vector<std::vector<int>> cornerNodeHandles;
 };
