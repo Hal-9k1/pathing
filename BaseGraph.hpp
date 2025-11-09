@@ -13,6 +13,9 @@ public:
   const Node &getNode(int handle) const;
 
 protected:
+  int createNode(const Vec2 &pos);
+  void connectNodes(int handle, int numNeighbors, int *pNeighbors);
+
   std::vector<Node> nodes;
   std::vector<std::vector<int>> neighbors;
 };
