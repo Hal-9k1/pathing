@@ -6,6 +6,7 @@
 #include "Node.hpp"
 #include "Vec2.hpp"
 #include "Graph.hpp"
+#include "ObstacleState.hpp"
 
 void Tests::runTests()
 {
@@ -169,6 +170,61 @@ void Tests::runTests()
         );
       }
     }
+    popScope();
+  }
+  popScope();
+  enterScope("ObstacleState");
+  {
+    ObstacleState obs({5, 2}, 0, {2, 2});
+    enterScope("unrotated");
+    assertEq(
+      "trivial nonintersection",
+      obs.intersectsSegment({{3, 4}, {9, 3}}),
+      false
+    );
+    assertEq(
+      "trivial intersection",
+      obs.intersectsSegment({{3, 2}, {9, 3}}),
+      true
+    );
+    popScope();
+    assertEq(
+      "y-boundary intersection",
+      obs.intersectsSegment({{3, 3}, {8, 3}}),
+      true
+    );
+    assertEq(
+      "x-boundary intersection",
+      obs.intersectsSegment({{4, 5}, {4, -1}}),
+      true
+    );
+    assertEq(
+      "mid-boundary endpoint",
+      obs.intersectsSegment({{4, 5}, {4, 2}}),
+      true
+    );
+    assertEq(
+      "endpoint inside obstacle",
+      obs.intersectsSegment({{4, 5}, {5, 2}}),
+      true
+    );
+    assertEq(
+      "corner intersection",
+      obs.intersectsSegment({{4, 5}, {7, 2}}),
+      true
+    );
+    obs = {{-4, 1}, 1.079922, {3, 4}};
+    enterScope("rotated");
+    assertEq(
+      "trivial nonintersection",
+      obs.intersectsSegment({{-9, -1}, {-5, 6}}),
+      false
+    );
+    assertEq(
+      "trivial intersection",
+      obs.intersectsSegment({{-9, -1}, {1, 0}}),
+      true
+    );
     popScope();
   }
   popScope();
