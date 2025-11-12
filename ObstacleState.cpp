@@ -1,6 +1,7 @@
 #include "ObstacleState.hpp"
 
 #include <cmath>
+#include <cstdio>
 
 ObstacleState::ObstacleState(const Vec2 &pos, double rot, const Vec2 &size)
   : pos(pos), rot(rot), size(size), corners(4), normal(1.0)
@@ -9,12 +10,10 @@ ObstacleState::ObstacleState(const Vec2 &pos, double rot, const Vec2 &size)
   double c = std::cos(rot);
   u = Vec2(c, s) * size.getX();
   v = Vec2(-s, c) * size.getY();
-  Vec2 xy = size / 2;
-  Vec2 xny(xy.getX(), -xy.getY());
-  corners[0] = pos - xy;
-  corners[1] = pos + xny;
-  corners[2] = pos + xy;
-  corners[3] = pos - xny;
+  corners[0] = pos - u / 2 + v / 2;
+  corners[1] = pos + u / 2 + v / 2;
+  corners[2] = pos + u / 2 - v / 2;
+  corners[3] = pos - u / 2 - v / 2;
 }
 
 bool ObstacleState::intersectsSegment(const Segment &segment) const

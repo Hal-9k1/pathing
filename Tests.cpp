@@ -10,6 +10,13 @@
 
 void Tests::runTests()
 {
+  enterScope("TestUtils");
+  {
+    assertEq("int assertEq works", 42, 42);
+    assertEq("double assertEq works", 1.231, 1.229, 2);
+    assertEq("Vec2 assertEq works", {1.231, -2.08}, {1.229, -2.084}, 2);
+  }
+  popScope();
   enterScope("Graph");
   {
     Graph graph;
@@ -225,6 +232,34 @@ void Tests::runTests()
       obs.intersectsSegment({{-9, -1}, {1, 0}}),
       true
     );
+    enterScope("corners are correct");
+    {
+      assertEq(
+        "0",
+        obs.getCorners()[0],
+        {-6.471, 0.6199},
+        4
+      );
+      assertEq(
+        "1",
+        obs.getCorners()[1],
+        {-5.057, 3.266},
+        4
+      );
+      assertEq(
+        "2",
+        obs.getCorners()[2],
+        {-1.529, 1.38},
+        4
+      );
+      assertEq(
+        "3",
+        obs.getCorners()[3],
+        {-2.943, -1.266},
+        4
+      );
+    }
+    popScope();
     popScope();
   }
   popScope();

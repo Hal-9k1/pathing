@@ -38,7 +38,7 @@ double Vec2::getY() const
 
 Vec2 Vec2::operator+(const Vec2 &other) const
 {
-  return { x - other.x, y - other.y };
+  return { x + other.x, y + other.y };
 }
 
 Vec2 Vec2::operator-(const Vec2 &other) const

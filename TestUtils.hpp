@@ -3,6 +3,8 @@
 #include <string>
 #include <vector>
 
+#include "Vec2.hpp"
+
 class TestUtils
 {
 public:
@@ -10,6 +12,9 @@ public:
 
 protected:
   void assertEqChain(const char *testName, int a, int b);
+  bool assert(const char *testName, const char *testDetail, bool pass);
+  bool assertEq(const char *testName, const Vec2 &a, const Vec2 &b, int precision);
+  bool assertEq(const char *testName, double a, double b, int precision);
   bool assertEq(const char *testName, int a, int b);
   void enterScope(const char *scopeName);
   void popScope();

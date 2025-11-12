@@ -1,7 +1,12 @@
 #include "TestUtils.hpp"
 
+#include <cmath>
 #include <string>
 #include <cstdio>
+#include <memory>
+
+#include "Vec2.hpp"
+#include "smartsprintf.hpp"
 
 int TestUtils::run()
 {
@@ -20,18 +25,46 @@ void TestUtils::assertEqChain(const char *testName, int a, int b)
   }
 }
 
-bool TestUtils::assertEq(const char *testName, int a, int b)
+bool TestUtils::assert(const char *testName, const char *testDetail, bool pass)
 {
-  std::string fullTestName;
+  std::string fullTestName; // FIXME: string realloc segfault, even right after creation
   qualifyTestName(testName, fullTestName);
-  std::printf("%s %d == %d\n", fullTestName.data(), a, b);
-  if (a != b)
+  std::printf("%s %s\n", fullTestName.data(), testDetail);
+  if (!pass)
   {
     std::printf("FAILED: %s\n", fullTestName.data());
     ++failures;
     return false;
   }
   return true;
+}
+
+bool TestUtils::assertEq(const char *testName, const Vec2 &a, const Vec2 &b, int precision)
+{
+  std::unique_ptr<char []> numFmt = smartsprintf("%%.%df", precision);
+  std::unique_ptr<char []> fmt = smartsprintf(
+    "<%s, %s> == <%s, %s>",
+    numFmt.get(), numFmt.get(), numFmt.get(), numFmt.get()
+  );
+  Vec2 scaleDiff = (a - b) * std::pow(10, precision);
+  Vec2 roundedDiff = {std::round(scaleDiff.getX()), std::round(scaleDiff.getY())};
+  std::unique_ptr<char []> detail = smartsprintf(fmt.get(), a.getX(), a.getY(), b.getX(), b.getY());
+  return assert(testName, detail.get(), roundedDiff.dot(roundedDiff) == 0.0);
+}
+
+bool TestUtils::assertEq(const char *testName, double a, double b, int precision)
+{
+  std::unique_ptr<char []> numFmt = smartsprintf("%%.%df", precision);
+  int scale = std::pow(10, precision);
+  std::unique_ptr<char []> fmt = smartsprintf("%s == %s", numFmt.get(), numFmt.get());
+  std::unique_ptr<char []> detail = smartsprintf(fmt.get(), a, b);
+  return assert(testName, detail.get(), std::round(a * scale) == std::round(b * scale));
+}
+
+bool TestUtils::assertEq(const char *testName, int a, int b)
+{
+  std::unique_ptr<char []> detail = smartsprintf("%d == %d", a, b);
+  return assert(testName, detail.get(), a == b);
 }
 
 void TestUtils::enterScope(const char *scopeName)

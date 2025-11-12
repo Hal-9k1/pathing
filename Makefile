@@ -6,7 +6,7 @@ include Makefile.localconfig
 
 ifdef DEBUG
   debug_defs := DEBUG _DEBUG
-  debug_cxx_flags := -O0 -ggdb3
+  debug_cxx_flags := -O0 -ggdb3 -fno-inline
 else
   debug_defs := NDEBUG
   debug_cxx_flags := -O3 -s
@@ -30,7 +30,7 @@ obj := $(src:.cpp=.o)
 # Preprocessor definitions
 defs := $(debug_defs)
 # Compiler/preprocessor flags
-CXXFLAGS := $(warnings) $(debug_cxx_flags) $(addprefix -D,$(defs))
+CXXFLAGS := $(warnings) $(debug_cxx_flags) $(addprefix -D,$(defs)) -std=c++17
 # Linker flags
 LDFLAGS := -static -static-libstdc++
 
